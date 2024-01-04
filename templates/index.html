@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CyberAI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 115%;
+            height: 100%;
+            max-width: 700px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 15px;
+            background-color: #4051db;
+            color: white;
+            text-align: center;
+            font-size: 24px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .chat-box {
+            overflow-y: auto;
+            padding: 20px;
+            word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            flex: 1; /* Fill remaining space */
+        }
+
+        .user-input {
+            width: calc(100% - 40px);
+            padding: 10px;
+            border: none;
+            border-bottom: 2px solid #4051db;
+            outline: none;
+            font-size: 16px;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+            margin-right: 10px;
+        }
+
+        .send-button {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            background-color: #4051db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+
+        .send-button:hover {
+            background-color: #3240b8;
+        }
+
+        .message-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin: 5px;
+            padding: 10px;
+            border-radius: 10px;
+            word-break: break-all;
+            max-width: 70%;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-message {
+            background-color: #DCF8C6;
+            color: #333;
+            align-self: flex-end;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+            position: relative;
+        }
+
+        .bot-message {
+            background-color: #F5F5F5;
+            color: #333;
+            align-self: flex-start;
+            border-top-left-radius: 0;
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+            position: relative;
+        }
+
+        .message img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .bot-message img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .user-message img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .bot-message::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-image: url('https://i.ibb.co/bRwKhgL/535-Cyber-Bot-Business-Card-Back-modified.png');
+            background-size: cover;
+            position: absolute;
+            left: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 50%;
+        }
+
+        .user-message::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-image: url('https://i.ibb.co/VYKySKh/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png');
+            background-size: cover;
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            CyberAI
+        </div>
+        <div class="chat-box" id="chat-box"></div>
+        <div class="message-container">
+            <input class="user-input" type="text" placeholder="Type a message..." id="user-input" onkeypress="enterPressed(event)">
+            <button class="send-button" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        function enterPressed(event) {
+            if (event.key === "Enter") {
+                sendMsg();
+            }
+        }
+
+        function sendMsg() {
+            var userText = document.getElementById("user-input").value;
+            if (userText.trim() === "") {
+                return;
+            }
+
+            var chatBox = document.getElementById("chat-box");
+            var userMsg = document.createElement("div");
+            userMsg.textContent = userText;
+            userMsg.classList.add("message", "user-message");
+            chatBox.appendChild(userMsg);
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    var botMsg = document.createElement("div");
+                    var response = this.responseText.trim();
+                    botMsg.textContent = response;
+                    botMsg.classList.add("message", "bot-message");
+                    chatBox.appendChild(botMsg);
+                    document.getElementById("user-input").value = "";
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            };
+            xhttp.open("GET", "/get?msg=" + userText, true);
+            xhttp.send();
+        }
+    </script>
+</body>
+</html>
