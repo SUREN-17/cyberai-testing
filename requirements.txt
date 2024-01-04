@@ -1,0 +1,5 @@
+gunicorn==20.1.0  # Use an appropriate version
+openpyxl==3.0.10  # Use an alternative version that is listed and compatible
+Flask==2.0.1
+Werkzeug==2.0.2
+# Add other dependencies if needed
