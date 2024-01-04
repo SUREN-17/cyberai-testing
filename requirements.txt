@@ -2,5 +2,5 @@ gunicorn==20.1.0
 openpyxl==3.0.10
 Flask==2.0.1
 Werkzeug==2.0.2
-spacy==3.2.0
-pydantic>=1.8.0,<1.9.0  # Use a compatible version range
+spacy==3.2.1
+pydantic==1.8.2
